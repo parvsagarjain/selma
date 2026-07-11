@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>WAITLIST CONFIRMED | SELMA PRECISION LABS</title>
+<meta name="description" content="You're on the SELMA Blaze Cap waitlist." />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "tertiary": "#c00007", "tertiary-dim": "#930004", "on-tertiary": "#ffffff",
+          "on-surface": "#1a1c1b", "surface-bright": "#f9f9f7", "surface-variant": "#e2e3e1",
+          "on-surface-variant": "#8a8d8c", "outline": "#747878", "outline-variant": "#3a3c3b",
+          "stage": "#0c0c0d", "panel": "#141514", "raised": "#1d1f1e",
+        },
+        borderRadius: { DEFAULT: "2px", lg: "2px", xl: "4px", full: "9999px" },
+        spacing: { "margin-mobile": "20px", "margin-desktop": "64px" },
+        fontFamily: {
+          "display-hero": ["Space Grotesk"], "headline-lg": ["Space Grotesk"], "headline-md": ["Space Grotesk"],
+          "body-md": ["Inter"], "technical-value": ["Space Mono"], "spec-label": ["JetBrains Mono"], "label-caps": ["Inter"],
+        },
+        fontSize: {
+          "spec-label": ["10px", { lineHeight: "12px", letterSpacing: "0.06em", fontWeight: "500" }],
+          "label-caps": ["11px", { lineHeight: "16px", letterSpacing: "0.14em", fontWeight: "700" }],
+          "headline-md": ["24px", { lineHeight: "24px", letterSpacing: "-0.02em", fontWeight: "700" }],
+          "headline-lg": ["clamp(44px,9vw,88px)", { lineHeight: "0.92", letterSpacing: "-0.03em", fontWeight: "700" }],
+          "technical-value": ["18px", { lineHeight: "24px", letterSpacing: "0.08em", fontWeight: "400" }],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; }
+  .stage-grid { background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 44px 44px; }
+  .stage-glow { background: radial-gradient(60% 55% at 50% 40%, rgba(120,124,124,.30) 0%, rgba(60,62,62,.13) 38%, rgba(12,12,13,0) 72%); }
+  .stage-vignette { background: radial-gradient(120% 100% at 50% 30%, transparent 55%, rgba(0,0,0,.7) 100%); }
+  .blaze-glow { background: radial-gradient(50% 50% at 50% 50%, rgba(192,0,7,.55) 0%, rgba(192,0,7,0) 70%); }
+  .hard-shadow:hover { box-shadow: 10px 10px 0 0 #000; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .rise { animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes pop { 0% { transform: scale(.6); opacity: 0; } 60% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
+  .pop { animation: pop .5s cubic-bezier(.2,.7,.2,1) both; }
+</style>
+</head>
+
+<body class="bg-stage text-surface-bright font-body-md min-h-[100dvh] flex flex-col overflow-x-hidden selection:bg-tertiary selection:text-white">
+
+  <!-- ===================== TOP APP BAR ===================== -->
+  <header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-20 bg-white border-b border-outline-variant shrink-0 z-50">
+    <a href="index.html" class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-tertiary">bolt</span>
+      <h1 class="font-display-hero text-2xl md:text-3xl font-bold tracking-tight text-tertiary">SELMA</h1>
+    </a>
+    <span class="hidden md:inline font-spec-label text-spec-label uppercase text-on-surface-variant">SESSION · SELMA-992-X</span>
+  </header>
+
+  <!-- ===================== STAGE ===================== -->
+  <main class="flex-1 relative grid place-items-center px-6 py-16 overflow-hidden">
+    <div class="absolute inset-0 stage-grid"></div>
+    <div class="absolute inset-0 stage-glow"></div>
+    <div class="absolute inset-0 stage-vignette pointer-events-none"></div>
+    <div class="absolute top-8 left-8 w-16 h-16 border-t border-l border-tertiary/40 pointer-events-none"></div>
+    <div class="absolute bottom-8 right-8 w-16 h-16 border-b border-r border-tertiary/40 pointer-events-none"></div>
+
+    <div class="relative z-10 w-full max-w-2xl text-center">
+      <!-- confirmation seal -->
+      <div class="relative mx-auto w-24 h-24 mb-8 pop">
+        <div class="absolute inset-0 blaze-glow"></div>
+        <div class="relative w-24 h-24 grid place-items-center border border-tertiary bg-panel/70 backdrop-blur">
+          <span class="material-symbols-outlined text-tertiary text-[52px]" style="font-variation-settings:'FILL' 1">check</span>
+        </div>
+      </div>
+
+      <p class="font-spec-label text-spec-label uppercase text-tertiary tracking-[0.24em] rise" style="animation-delay:.05s">Reservation Confirmed · Limited Edition</p>
+      <h2 class="font-headline-lg text-headline-lg uppercase mt-4 rise" style="animation-delay:.12s">YOU'RE ON<br />THE WAITLIST.</h2>
+
+      <p class="font-body-md text-[14px] md:text-[15px] text-on-surface-variant leading-relaxed mt-6 max-w-lg mx-auto rise" style="animation-delay:.2s">
+        Your spot for the <span class="text-surface-bright">Blaze Cap</span> is secured. The moment your build opens for production, we'll reach out at
+        <b id="wl-email" class="text-surface-bright break-all">your inbox</b>.
+      </p>
+
+      <!-- ticket -->
+      <div class="mt-9 inline-flex items-stretch border border-outline-variant bg-panel/60 backdrop-blur rise" style="animation-delay:.28s">
+        <div class="px-5 py-3 border-r border-outline-variant text-left">
+          <span class="block font-spec-label text-[9px] uppercase text-on-surface-variant">Queue ID</span>
+          <span id="wl-id" class="font-technical-value text-[15px] text-surface-bright">SELMA-BLZ-0000</span>
+        </div>
+        <div class="px-5 py-3 text-left">
+          <span class="block font-spec-label text-[9px] uppercase text-on-surface-variant">Status</span>
+          <span class="font-technical-value text-[15px] text-tertiary">RESERVED</span>
+        </div>
+      </div>
+
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 rise" style="animation-delay:.36s">
+        <a href="configure.html" class="bg-tertiary text-white px-7 py-3 font-label-caps text-label-caps uppercase transition-all hard-shadow active:scale-95 flex items-center gap-2">
+          Back to configurator
+          <span class="material-symbols-outlined text-[16px]">tune</span>
+        </a>
+        <a href="index.html" class="px-7 py-3 border border-on-surface-variant/40 font-label-caps text-label-caps uppercase text-surface-bright hover:bg-white/5 transition-colors active:scale-95">Return home</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="shrink-0 flex flex-col sm:flex-row justify-between items-center gap-2 px-margin-mobile md:px-margin-desktop py-5 bg-white border-t-2 border-outline-variant z-50">
+    <span class="font-display-hero text-lg font-bold text-tertiary">SELMA</span>
+    <span class="font-spec-label text-spec-label uppercase text-on-surface-variant">The Blaze Cap — Be seen. Ride blaze.</span>
+    <a href="https://www.instagram.com/selma_theblazecap/" target="_blank" rel="noopener noreferrer" class="font-spec-label text-spec-label uppercase text-on-surface hover:text-tertiary transition-colors">@selma_theblazecap</a>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const email = params.get("email");
+    if (email) document.getElementById("wl-email").textContent = email;
+    // stable-ish queue id derived from the email so it looks like a real reservation
+    const seed = (email || "guest").split("").reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+    document.getElementById("wl-id").textContent = "SELMA-BLZ-" + String(1000 + (seed % 9000));
+  </script>
+</body>
+</html>

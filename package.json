@@ -1,0 +1,13 @@
+{
+  "name": "selma-blaze-cap",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SELMA — The Blaze Cap. Marketing site + 3D configurator with a waitlist API (Node http + SQLite).",
+  "scripts": {
+    "start": "node --env-file=.env server.mjs",
+    "start:nomirror": "node server.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.11.1"
+  }
+}

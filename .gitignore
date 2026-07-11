@@ -1,0 +1,11 @@
+# secrets — never commit real credentials
+.env
+
+# local SQLite database — contains real waitlist sign-ups (PII), do not publish
+data/*.db
+data/*.db-*
+data/*.log
+
+# dependencies / OS cruft
+node_modules/
+.DS_Store

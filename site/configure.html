@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>S — CONFIGURATOR | SELMA PRECISION LABS</title>
+<meta name="description" content="Build your SELMA Blaze Cap — core, shell, LED signature and modules. Technical precision, configured." />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "tertiary": "#c00007",
+          "tertiary-dim": "#930004",
+          "on-tertiary": "#ffffff",
+          "on-surface": "#1a1c1b",
+          "surface-bright": "#f9f9f7",
+          "surface-variant": "#e2e3e1",
+          "on-surface-variant": "#8a8d8c",
+          "outline": "#747878",
+          "outline-variant": "#3a3c3b",
+          "stage": "#0c0c0d",
+          "panel": "#141514",
+          "raised": "#1d1f1e",
+        },
+        borderRadius: { DEFAULT: "2px", lg: "2px", xl: "4px", full: "9999px" },
+        spacing: { "margin-mobile": "20px", "margin-desktop": "64px" },
+        fontFamily: {
+          "display-hero": ["Space Grotesk"],
+          "headline-lg": ["Space Grotesk"],
+          "headline-md": ["Space Grotesk"],
+          "body-md": ["Inter"],
+          "technical-value": ["Space Mono"],
+          "spec-label": ["JetBrains Mono"],
+          "label-caps": ["Inter"],
+        },
+        fontSize: {
+          "spec-label": ["10px", { lineHeight: "12px", letterSpacing: "0.06em", fontWeight: "500" }],
+          "label-caps": ["11px", { lineHeight: "16px", letterSpacing: "0.14em", fontWeight: "700" }],
+          "headline-md": ["24px", { lineHeight: "24px", letterSpacing: "-0.02em", fontWeight: "700" }],
+          "headline-lg": ["40px", { lineHeight: "36px", letterSpacing: "-0.02em", fontWeight: "700" }],
+          "technical-value": ["18px", { lineHeight: "24px", letterSpacing: "0.08em", fontWeight: "400" }],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; }
+  /* Moody performance-lab stage */
+  .stage-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .stage-glow { background: radial-gradient(60% 55% at 50% 42%, rgba(120,124,124,.32) 0%, rgba(60,62,62,.14) 38%, rgba(12,12,13,0) 72%); }
+  .stage-vignette { background: radial-gradient(120% 100% at 50% 30%, transparent 55%, rgba(0,0,0,.7) 100%); }
+  .scanline { background: linear-gradient(rgba(255,255,255,.03) 50%, transparent 50%); background-size: 100% 3px; }
+  .floor-shadow { background: radial-gradient(ellipse 42% 12% at 50% 50%, rgba(0,0,0,.65), transparent 70%); }
+  .blueprint-line { background-image: linear-gradient(90deg, #c00007 55%, transparent 55%); background-size: 7px 1px; }
+  .blueprint-line-v { background-image: linear-gradient(0deg, #c00007 55%, transparent 55%); background-size: 1px 7px; }
+  .hard-shadow:hover { box-shadow: 10px 10px 0 0 #000; }
+  .panel-scroll::-webkit-scrollbar { width: 3px; }
+  .panel-scroll::-webkit-scrollbar-thumb { background: #c00007; }
+  .panel-scroll::-webkit-scrollbar-track { background: transparent; }
+  /* the offset "hard" shadow on a selected card — carried over from the light pass */
+  .opt-card.is-active, .swatch.is-active { border-color: #c00007; box-shadow: 8px 8px 0 0 #2e302f; }
+  @keyframes tickerdrift { 0%,100% { transform: translateY(-4px);} 50% { transform: translateY(4px);} }
+  .drift { animation: tickerdrift 4s ease-in-out infinite; }
+  /* keep the app-bar title on one line on the narrowest phones (iPhone SE / small Android) */
+  @media (max-width: 374px) { #cfg-title { font-size: 22px; line-height: 1.05; } }
+</style>
+</head>
+
+<body class="bg-stage text-surface-bright font-body-md h-[100dvh] flex flex-col overflow-hidden selection:bg-tertiary selection:text-white">
+
+<!-- ===================== TOP APP BAR ===================== -->
+<header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-20 bg-white border-b border-outline-variant shrink-0 z-50">
+  <div class="flex items-center gap-3 md:gap-4">
+    <a href="index.html" class="flex items-center justify-center w-9 h-9 -ml-2 text-on-surface hover:text-tertiary transition-colors active:scale-95" aria-label="Back to SELMA home">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <h1 id="cfg-title" class="font-display-hero text-3xl md:text-4xl font-bold tracking-tight text-tertiary">S — CONFIGURATOR</h1>
+  </div>
+  <div class="flex items-center gap-4 md:gap-6">
+    <span class="hidden md:inline font-spec-label text-spec-label uppercase text-on-surface-variant">SESSION · SELMA-992-X</span>
+    <button id="cart-btn" class="relative text-on-surface hover:text-tertiary transition-colors active:scale-95" aria-label="Open cart">
+      <span class="material-symbols-outlined align-middle">shopping_cart</span>
+      <span id="cart-count" class="absolute -top-1.5 -right-2 bg-tertiary text-white text-[9px] leading-none min-w-[15px] h-[15px] px-1 grid place-items-center font-bold">3</span>
+    </button>
+  </div>
+</header>
+
+<!-- ===================== BODY (rail + panel + stage) ===================== -->
+<div class="flex-1 flex min-h-0">
+
+  <!-- Category rail -->
+  <nav id="rail" class="shrink-0 flex flex-col bg-panel border-r border-outline-variant w-16 md:w-24">
+    <div class="py-3 text-center border-b border-outline-variant">
+      <span class="font-spec-label text-spec-label uppercase text-on-surface-variant">SPECS</span>
+    </div>
+    <!-- buttons injected by JS -->
+  </nav>
+
+  <!-- Main -->
+  <main class="flex-1 flex flex-col md:flex-row min-w-0 min-h-0">
+
+    <!-- Config panel: on mobile it's the flexible, internally-scrolling area; on desktop a fixed sidebar -->
+    <section class="order-2 md:order-1 w-full md:w-[380px] flex-1 md:flex-none bg-panel md:bg-panel/70 backdrop-blur border-t md:border-t-0 md:border-r border-outline-variant flex flex-col min-h-0">
+      <div class="px-6 pt-3 pb-3 md:pt-5 md:pb-4 border-b border-outline-variant shrink-0">
+        <div class="flex items-center justify-between">
+          <span id="cat-index" class="font-spec-label text-spec-label text-surface-bright">01 — CATEGORY</span>
+          <span class="bg-surface-bright text-on-surface font-spec-label text-spec-label px-2 py-0.5">LIMITED EDITION</span>
+        </div>
+        <h2 id="cat-title" class="font-headline-md text-headline-md uppercase mt-1.5 md:mt-2">CORE COMPONENT</h2>
+        <p id="cat-desc" class="font-body-md text-[13px] text-on-surface-variant leading-snug mt-2 hidden md:block"></p>
+      </div>
+      <div id="options" class="flex-1 overflow-y-auto panel-scroll px-6 py-3 md:py-5 min-h-0"></div>
+    </section>
+
+    <!-- Stage / preview: fixed height on mobile, fills remaining width on desktop -->
+    <section class="order-1 md:order-2 relative overflow-hidden h-[30dvh] shrink-0 md:h-auto md:flex-1 md:min-h-0">
+      <div class="absolute inset-0 bg-stage"></div>
+      <div class="absolute inset-0 stage-grid"></div>
+      <div class="absolute inset-0 stage-glow"></div>
+      <div class="absolute inset-0 scanline opacity-40 pointer-events-none"></div>
+      <div class="absolute inset-0 stage-vignette pointer-events-none"></div>
+      <div class="absolute top-6 left-6 w-16 h-16 border-t border-l border-tertiary/40 pointer-events-none"></div>
+      <div class="absolute bottom-6 right-6 w-16 h-16 border-b border-r border-tertiary/40 pointer-events-none"></div>
+      <div class="absolute top-5 right-5 lg:right-16 z-30">
+        <span id="stage-tag" class="font-spec-label text-spec-label text-surface-bright border border-outline-variant px-3 py-1 bg-panel/60 backdrop-blur-sm">S — 01 / CORE</span>
+      </div>
+      <!-- mobile-only fullscreen affordance (desktop uses the footer "View Full Screen" button) -->
+      <button id="stage-fs" class="md:hidden absolute bottom-4 right-4 z-30 flex items-center gap-1.5 px-3 py-2 bg-panel/70 backdrop-blur-sm border border-outline-variant text-surface-bright active:scale-95" aria-label="View full screen">
+        <span class="material-symbols-outlined text-[18px]">open_in_full</span>
+        <span class="font-spec-label text-spec-label uppercase">Full view</span>
+      </button>
+
+      <!-- helmet + annotations -->
+      <div class="relative z-10 h-full w-full flex items-center justify-center p-8">
+        <div class="relative w-[86%] max-w-[560px] aspect-square flex items-center justify-center">
+          <div class="absolute bottom-[8%] inset-x-0 h-16 floor-shadow"></div>
+          <img id="helmet" alt="SELMA Blaze Cap preview" class="relative w-full h-full object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,.7)] transition-opacity duration-300" src="assets/helmet-side-cut.png" style="display:none" />
+          <model-viewer id="mv" style="position:absolute;inset:0;width:100%;height:100%;background:transparent"
+            camera-controls interaction-prompt="none" disable-zoom disable-pan exposure="1.15" shadow-intensity="0.5"
+            interpolation-decay="1"
+            data-note="Rotation on every section EXCEPT LED is DRIVEN BY JS (heroTick loop), NOT model-viewer's `auto-rotate` — with auto-rotate on, model-viewer overrides jumpCameraToGoal and eases the camera, which swung through random angles on a category/colour change. The loop hard-jumps to an angle we own every frame, so reloads/switches never drift. LED locks to the dead-rear view (loop paused)."
+            camera-orbit="210deg 80deg auto" min-camera-orbit="auto 72deg auto" max-camera-orbit="auto 92deg auto"
+            field-of-view="30deg" min-field-of-view="30deg" max-field-of-view="30deg"></model-viewer>
+
+          <div class="absolute -top-2 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center pointer-events-none">
+            <div class="border border-outline-variant bg-panel/80 backdrop-blur-sm px-2.5 py-1">
+              <span data-ann="0" class="font-spec-label text-spec-label text-surface-bright whitespace-nowrap"></span>
+            </div>
+            <div class="w-px h-8 blueprint-line-v"></div>
+          </div>
+          <div class="absolute top-[34%] -right-2 md:-right-6 hidden md:flex items-center pointer-events-none">
+            <div class="w-10 md:w-16 h-px blueprint-line"></div>
+            <div class="border border-outline-variant bg-panel/80 backdrop-blur-sm px-2.5 py-1">
+              <span data-ann="1" class="font-spec-label text-spec-label text-surface-bright whitespace-nowrap"></span>
+            </div>
+          </div>
+          <div class="absolute bottom-[26%] -left-2 md:-left-6 hidden md:flex items-center pointer-events-none">
+            <div class="border border-outline-variant bg-panel/80 backdrop-blur-sm px-2.5 py-1">
+              <span data-ann="2" class="font-spec-label text-spec-label text-surface-bright whitespace-nowrap"></span>
+            </div>
+            <div class="w-10 md:w-16 h-px blueprint-line"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- editorial label -->
+      <div class="hidden md:flex absolute top-10 left-10 flex-col pointer-events-none z-20">
+        <span id="stage-index" class="font-spec-label text-label-caps text-on-surface-variant">S — 01</span>
+        <span id="stage-unit" class="font-headline-lg text-headline-lg uppercase tracking-tighter text-surface-bright">CORE UNIT</span>
+      </div>
+
+      <!-- right data ticker -->
+      <div class="hidden lg:flex absolute top-0 right-0 bottom-0 w-12 border-l border-outline-variant flex-col items-center py-6 gap-6 bg-panel/40 z-20">
+        <span class="font-spec-label text-[10px] [writing-mode:vertical-lr] text-on-surface-variant drift">S—DRIVE ACTIVE</span>
+        <div class="flex-1 border-r border-dashed border-outline-variant w-px"></div>
+        <span class="font-spec-label text-[10px] [writing-mode:vertical-lr] text-surface-bright font-bold">PRECISION LABS</span>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ===================== TRANSACTION BAR ===================== -->
+<footer class="shrink-0 flex justify-between items-center gap-4 px-margin-mobile md:px-margin-desktop py-5 md:py-6 bg-white border-t-2 border-outline-variant z-50">
+  <div class="flex items-end gap-4 md:gap-8 min-w-0">
+    <div class="flex flex-col">
+      <span class="font-spec-label text-spec-label text-on-surface-variant uppercase">Total Estimate</span>
+      <span id="total" class="font-technical-value text-tertiary text-2xl md:text-3xl font-bold leading-none tracking-wide">₹3,000</span>
+    </div>
+    <div class="hidden sm:block h-8 w-px bg-outline-variant"></div>
+    <div class="hidden sm:flex gap-5">
+      <div class="flex flex-col">
+        <span class="font-spec-label text-[9px] text-on-surface-variant uppercase">Lead Time</span>
+        <span class="font-technical-value text-[13px] text-on-surface">12 DAYS</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-spec-label text-[9px] text-on-surface-variant uppercase">Warranty</span>
+        <span class="font-technical-value text-[13px] text-on-surface">5 YEARS</span>
+      </div>
+    </div>
+  </div>
+  <div class="flex items-center gap-3 shrink-0">
+    <button id="fs-open" class="hidden md:inline-flex items-center gap-2 px-6 py-2.5 border border-on-surface/30 font-label-caps text-label-caps uppercase text-on-surface hover:bg-on-surface hover:text-white transition-colors active:scale-95">
+      <span class="material-symbols-outlined text-[16px]">fullscreen</span>
+      View Full Screen
+    </button>
+    <button id="bar-checkout" class="bg-tertiary text-white px-6 md:px-9 py-2.5 font-label-caps text-label-caps uppercase transition-all hard-shadow active:scale-95 group flex items-center gap-2">
+      Checkout
+      <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+    </button>
+  </div>
+</footer>
+
+<!-- ===================== FULL-SCREEN VIEWER ===================== -->
+<!-- The live #mv model-viewer is moved in here on open (so it keeps its LED animation, visor tint,
+     camera mod and materials) and moved back to the stage on close. -->
+<div id="fs-overlay" class="fixed inset-0 z-[100] bg-stage hidden">
+  <div class="absolute inset-0 stage-grid"></div>
+  <div class="absolute inset-0 stage-glow"></div>
+  <div class="absolute inset-0 stage-vignette pointer-events-none"></div>
+  <div id="fs-stage" class="absolute inset-0"></div>
+  <button id="fs-back" class="absolute top-5 left-5 z-20 flex items-center gap-2 px-4 py-2 bg-panel/70 backdrop-blur border border-outline-variant text-surface-bright font-label-caps text-label-caps uppercase hover:bg-tertiary hover:border-tertiary transition-colors active:scale-95" aria-label="Back to configurator">
+    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+    Back
+  </button>
+  <span class="absolute top-6 right-6 z-20 hidden sm:inline font-spec-label text-spec-label text-on-surface-variant pointer-events-none">DRAG&nbsp;TO&nbsp;ROTATE&nbsp;·&nbsp;SCROLL&nbsp;TO&nbsp;ZOOM</span>
+</div>
+
+<!-- ===================== CART DRAWER ===================== -->
+<div id="cart-scrim" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[95] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+<aside id="cart-panel" class="fixed top-0 right-0 h-[100dvh] w-full max-w-[420px] bg-panel border-l border-outline-variant z-[96] translate-x-full transition-transform duration-300 ease-out flex flex-col shadow-[0_0_60px_rgba(0,0,0,.6)]">
+  <div class="flex items-center justify-between px-6 h-20 border-b border-outline-variant shrink-0">
+    <div class="flex flex-col">
+      <span class="font-spec-label text-spec-label uppercase text-on-surface-variant">Your build</span>
+      <h2 id="cart-heading" class="font-headline-md text-headline-md uppercase text-surface-bright">CART</h2>
+    </div>
+    <button id="cart-close" class="w-9 h-9 grid place-items-center text-on-surface-variant hover:text-surface-bright transition-colors active:scale-95" aria-label="Close cart">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+
+  <!-- CART VIEW -->
+  <div id="cart-view" class="flex-1 flex flex-col min-h-0">
+    <div id="cart-items" class="flex-1 overflow-y-auto panel-scroll px-6 py-5 space-y-3"></div>
+    <div class="px-6 py-5 border-t border-outline-variant shrink-0">
+      <div class="flex items-baseline justify-between mb-2">
+        <span class="font-spec-label text-spec-label text-on-surface-variant uppercase">Total Estimate</span>
+        <span id="cart-total" class="font-technical-value text-tertiary text-2xl font-bold tracking-wide">₹0</span>
+      </div>
+      <div class="flex items-center justify-between mb-4 text-on-surface-variant">
+        <span class="font-spec-label text-[9px] uppercase">Lead time · 12 days</span>
+        <span class="font-spec-label text-[9px] uppercase">Warranty · 5 years</span>
+      </div>
+      <button id="cart-checkout" class="w-full bg-tertiary text-white px-6 py-3 font-label-caps text-label-caps uppercase transition-all hard-shadow active:scale-95 flex items-center justify-center gap-2">
+        Checkout
+        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- EMAIL VIEW -->
+  <div id="email-view" class="flex-1 flex-col min-h-0 hidden">
+    <div class="flex-1 overflow-y-auto panel-scroll px-6 py-6">
+      <button id="email-back" class="flex items-center gap-1 text-on-surface-variant hover:text-surface-bright font-spec-label text-spec-label uppercase mb-7 transition-colors">
+        <span class="material-symbols-outlined text-[16px]">arrow_back</span> Back to cart
+      </button>
+      <span class="font-spec-label text-spec-label uppercase text-tertiary tracking-[0.2em]">Limited production</span>
+      <h3 class="font-headline-md text-headline-md uppercase text-surface-bright mt-3">JOIN THE<br />WAITLIST</h3>
+      <p class="font-body-md text-[13px] text-on-surface-variant leading-snug mt-3">The Blaze Cap ships in limited batches. Drop your email to reserve your place in line — we'll reach out the moment your build opens for production.</p>
+      <label class="block mt-7">
+        <span class="font-spec-label text-spec-label text-on-surface-variant uppercase">Email address</span>
+        <input id="email-input" type="email" inputmode="email" autocomplete="email" required placeholder="you@example.com"
+          class="mt-2 w-full bg-stage border border-outline-variant px-4 py-3 font-technical-value text-surface-bright text-[15px] placeholder:text-outline focus:border-tertiary outline-none transition-colors" />
+        <span id="email-err" class="hidden mt-2 font-spec-label text-spec-label text-tertiary uppercase">↳ Enter a valid email address</span>
+      </label>
+      <div class="mt-6 border border-outline-variant bg-stage/50 p-4">
+        <div class="flex items-baseline justify-between">
+          <span class="font-spec-label text-[9px] uppercase text-on-surface-variant">Reserving this build</span>
+          <span id="email-total" class="font-technical-value text-[15px] text-surface-bright">₹0</span>
+        </div>
+        <p id="email-summary" class="font-spec-label text-[10px] text-on-surface-variant mt-1.5 leading-relaxed"></p>
+      </div>
+    </div>
+    <div class="px-6 py-5 border-t border-outline-variant shrink-0">
+      <button id="email-confirm" class="w-full bg-tertiary text-white px-6 py-3 font-label-caps text-label-caps uppercase transition-all hard-shadow active:scale-95 flex items-center justify-center gap-2 disabled:opacity-60">
+        Confirm email
+        <span class="material-symbols-outlined text-[16px]">check</span>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<script>
+/* ---------------- data model ---------------- */
+const BASE = 0; // no hidden base fee — the estimate is exactly the sum of the selected items
+const CATS = [
+  {
+    id: "core", label: "CORE", icon: "settings_input_component", index: "01",
+    title: "CORE COMPONENT", tag: "S — 01 / CORE", unit: "CORE UNIT", layout: "card", select: "single",
+    desc: "The core unit defines the primary signal-processing architecture. Choose WIRED for zero-loss performance.",
+    image: "assets/helmet-side-cut.png",
+    ann: ["SIGNAL_CORE // ESP32-S3", "PORT // USB-C", "MOUNT // P01"],
+    options: [
+      { id: "wired", name: "M-01 WIRED", price: 3000, code: "OPT_01", specs: { LATENCY: "0.0ms", CONNECTION: "USB_C_DIRECT" } },
+      { id: "wireless", name: "M-02 WIRELESS", price: 6000, code: "OPT_02", specs: { LATENCY: "1.2ms", CONNECTION: "BT_LOW_LATENCY" } },
+    ],
+    default: "wired",
+  },
+  {
+    id: "shell", label: "SHELL", icon: "palette", index: "02",
+    title: "COLORWAY", tag: "S — 02 / SHELL", unit: "SHELL FINISH", layout: "swatch", select: "single",
+    desc: "Premium pigment collection. Aerospace-grade composite shell in matte, gloss or metallic.",
+    image: "assets/helmet-front-cut.png",
+    ann: ["SHELL // COMPOSITE", "FINISH // MATTE", "WEIGHT // 1.35KG"],
+    options: [
+      { id: "bone", name: "BONE WHITE", price: 0, swatch: "#f5f5f3", model: "bone" },
+      { id: "ink", name: "INK BLACK", price: 0, swatch: "#1a1c1b", model: "ink" },
+      { id: "blaze", name: "BLAZE RED", price: 500, swatch: "#c00007", model: "blaze" },
+      { id: "chrome", name: "CHROME SILVER", price: 1200, swatch: "#c6c6c7", model: "silver" },
+    ],
+    default: "ink",
+  },
+  {
+    id: "led", label: "LED", icon: "light_mode", index: "03",
+    title: "LIGHT SIGNATURE", tag: "S — 03 / LED", unit: "LED ARRAY", layout: "card", select: "single",
+    desc: "High-mount 12V LED brake + indicator arrays — fired straight into the eyeline of the driver behind you.",
+    image: "assets/helmet-lights.png",
+    ann: ["BRAKE // 800LM", "INDICATOR // AMBER", "MOUNT // HIGH"],
+    options: [
+      { id: "std", name: "A-01 STANDARD", price: 0, code: "OPT_01", specs: { LUMENS: "800lm", PATTERN: "STATIC_TRI" } },
+      { id: "high", name: "A-02 HIGH-LUM", price: 1500, code: "OPT_02", specs: { LUMENS: "1600lm", PATTERN: "STATIC_TRI" } },
+      { id: "seq", name: "A-03 SEQUENTIAL", price: 2500, code: "OPT_03", specs: { LUMENS: "1600lm", PATTERN: "SWEEP_ANIM" } },
+    ],
+    default: "std",
+  },
+  {
+    id: "mods", label: "MODS", icon: "extension", index: "04",
+    title: "MODULES", tag: "S — 04 / MODS", unit: "MOD BAYS", layout: "card", select: "multi",
+    desc: "Optional hardware bays. Modules stack onto the base P01 mount — add as many as you need.",
+    image: "assets/helmet-side-cut.png",
+    ann: ["BAY_A // OPEN", "RAIL // P01", "BAY_B // OPEN"],
+    options: [
+      { id: "visor", name: "RADIUM VISOR", price: 500, code: "MOD_A", specs: { TINT: "SMOKE_BLACK", OPTICAL: "CLASS_1" } },
+      { id: "comms", name: "COMMS MODULE", price: 2500, code: "MOD_B", specs: { RANGE: "800M", CODEC: "MESH_2.0" } },
+      { id: "cam", name: "ACTION CAMERA", price: 4000, code: "MOD_C", specs: { MOUNT: "P01_RAIL", LOAD: "250G" } },
+    ],
+    default: [],
+  },
+];
+
+/* ---------------- state ---------------- */
+const state = { active: "core", pick: {} };
+CATS.forEach((c) => (state.pick[c.id] = c.select === "multi" ? new Set(c.default) : c.default));
+// Honor ?core=wired|wireless from the home page's "Choose Wired/Wireless" buttons so the picked
+// version is pre-selected on arrival.
+const coreParam = new URLSearchParams(location.search).get("core");
+if (coreParam && CATS.find((c) => c.id === "core").options.some((o) => o.id === coreParam)) state.pick.core = coreParam;
+let use3D = true; // falls back to static images if the GLB can't load (file:// , offline, or no WebGL)
+
+const $ = (s, r = document) => r.querySelector(s);
+const rupee = (n) => "₹" + n.toLocaleString("en-IN");
+const catById = (id) => CATS.find((c) => c.id === id);
+const priceLabel = (o, cat) => (o.price === 0 ? "INCLUDED" : (cat.select === "single" && cat.id !== "core" ? "+" : "") + rupee(o.price));
+const isPicked = (cat, id) => (cat.select === "multi" ? state.pick[cat.id].has(id) : state.pick[cat.id] === id);
+
+/* ---------------- rail ---------------- */
+const rail = $("#rail");
+CATS.forEach((c) => {
+  const b = document.createElement("button");
+  b.dataset.cat = c.id;
+  b.className = "cat-btn relative flex flex-col items-center justify-center py-6 transition-all";
+  b.innerHTML =
+    `<span class="material-symbols-outlined mb-1.5">${c.icon}</span>` +
+    `<span class="font-spec-label text-[8px] tracking-widest uppercase">${c.label}</span>`;
+  b.addEventListener("click", () => setCategory(c.id));
+  rail.appendChild(b);
+});
+function paintRail() {
+  rail.querySelectorAll(".cat-btn").forEach((b) => {
+    const on = b.dataset.cat === state.active;
+    b.className =
+      "cat-btn relative flex flex-col items-center justify-center py-6 transition-all " +
+      (on ? "bg-tertiary text-white border-l-4 border-surface-bright"
+          : "text-on-surface-variant hover:text-surface-bright hover:bg-white/5");
+    b.querySelector(".material-symbols-outlined").style.fontVariationSettings = on ? "'FILL' 1" : "'FILL' 0";
+  });
+}
+
+/* ---------------- panel ---------------- */
+function specCard(cat, o, on) {
+  const rows = Object.entries(o.specs)
+    .map(([k, v]) => `<div class="flex justify-between items-center"><span class="font-spec-label text-spec-label text-on-surface-variant">${k}</span><span class="font-technical-value text-[12px] text-surface-bright">${v}</span></div>`)
+    .join("");
+  const marker = cat.select === "multi"
+    ? `<span class="material-symbols-outlined text-[18px] md:text-[20px] ${on ? "text-tertiary" : "text-outline"}" style="font-variation-settings:'FILL' ${on ? 1 : 0}">${on ? "check_box" : "check_box_outline_blank"}</span>`
+    : `<span class="material-symbols-outlined text-[18px] md:text-[20px] ${on ? "text-tertiary" : "text-outline"}" style="font-variation-settings:'FILL' ${on ? 1 : 0}">${on ? "check_circle" : "radio_button_unchecked"}</span>`;
+  return (
+    // Mobile: compact (tight padding, no spec-detail rows) so every option fits without scrolling.
+    // md+ restores the full desktop card (larger padding, visible spec rows) — desktop is unchanged.
+    `<button data-opt="${o.id}" class="opt-card w-full text-left border p-2.5 md:p-5 relative transition-all active:scale-[.99] ${on ? "is-active bg-raised" : "border-outline-variant bg-stage/60 hover:border-tertiary/70"}">` +
+      (on ? `<span class="absolute top-0 right-0 bg-tertiary text-white font-spec-label text-[8px] px-2 py-0.5">${cat.select === "multi" ? "ADDED" : "ACTIVE"}</span>` : "") +
+      `<div class="flex justify-between items-start mb-0 md:mb-4">` +
+        `<div class="flex flex-col">` +
+          `<span class="font-spec-label text-[10px] text-on-surface-variant hidden md:block">${o.code}</span>` +
+          `<h3 class="font-display-hero text-[15px] md:text-[17px] leading-none mt-1">${o.name}</h3>` +
+          `<p class="font-technical-value text-[12px] md:text-[13px] mt-1 md:mt-1.5 ${on ? "text-surface-bright" : "text-on-surface-variant"}">${priceLabel(o, cat)}</p>` +
+        `</div>${marker}` +
+      `</div>` +
+      `<div class="hidden md:block space-y-1.5 border-t border-outline-variant pt-3">${rows}</div>` +
+    `</button>`
+  );
+}
+
+function swatchTile(cat, o, on) {
+  return (
+    `<button data-opt="${o.id}" class="swatch flex flex-col border p-2 md:p-3 transition-all active:scale-[.98] ${on ? "is-active bg-raised" : "border-outline-variant bg-stage/60 hover:border-tertiary/70"}">` +
+      `<div class="w-full h-9 md:h-14 mb-1 md:mb-2 border border-outline-variant" style="background:${o.swatch}"></div>` +
+      `<span class="font-spec-label text-spec-label text-left text-surface-bright">${o.name}</span>` +
+      `<span class="font-technical-value text-[11px] text-left mt-0.5 ${on ? "text-surface-bright" : "text-on-surface-variant"}">${priceLabel(o, cat)}</span>` +
+      (on ? `<span class="font-spec-label text-[8px] text-surface-bright mt-1 text-left">✓ SELECTED</span>` : "") +
+    `</button>`
+  );
+}
+
+function renderPanel() {
+  const cat = catById(state.active);
+  $("#cat-index").textContent = cat.index + " — CATEGORY";
+  $("#cat-title").textContent = cat.title;
+  $("#cat-desc").textContent = cat.desc;
+  $("#stage-tag").textContent = cat.tag;
+  $("#stage-index").textContent = "S — " + cat.index;
+  $("#stage-unit").textContent = cat.unit;
+
+  const box = $("#options");
+  if (cat.layout === "swatch") {
+    box.className = "flex-1 overflow-y-auto panel-scroll px-6 py-3 md:py-5 min-h-0 grid grid-cols-2 gap-2 md:gap-3 content-start";
+    box.innerHTML = cat.options.map((o) => swatchTile(cat, o, isPicked(cat, o.id))).join("");
+  } else {
+    box.className = "flex-1 overflow-y-auto panel-scroll px-6 py-3 md:py-5 min-h-0 space-y-2 md:space-y-4";
+    box.innerHTML = cat.options.map((o) => specCard(cat, o, isPicked(cat, o.id))).join("");
+  }
+  box.querySelectorAll("[data-opt]").forEach((el) => el.addEventListener("click", () => pickOption(cat, el.dataset.opt)));
+}
+
+/* ---------------- preview ---------------- */
+// Hero framing: front-3/4 that slowly rotates (azimuth driven by heroTheta below). Target is the
+// EXPLICIT helmet centre (NOT "auto": auto re-frames with a separate eased target-slide).
+const HERO_TARGET = "-9m -6m -70m";
+// Dead-on BACK of the helmet with the LED array centred in frame. Camera targets the LED module's
+// own centre (model coords ~194.7,8,-70.3 = back edge, lateral centre, ~vertical centre) so the
+// lights sit dead-centre; azimuth 95deg is the symmetric head-on-back for that target (all 4 shells
+// share the same geometry + bake pipeline so it's identical across colours). This view is HARD-SNAPPED
+// (jumpCameraToGoal) every time the LED page opens or an LED option is clicked — see renderPreview.
+const LED_ORBIT  = "95deg 84deg 460m";
+const LED_TARGET = "194.7m 8m -70.3m";
+const HERO_EXPOSURE = "1.15";
+const LED_EXPOSURE  = "1.15";           // no dimming — helmet lit normally, same as the other categories
+let brakeMat = null, indR = null, indL = null; // live emissive LED materials, bound by name each load
+let ledMode = null;                            // "static" | "sweep" — which LED texture setup is active
+let visorMat = null;                           // front visor glass, tinted live by the RADIUM VISOR mod
+const VISOR_STOCK = [0.035, 0.04, 0.045, 0.42]; // default light smoke tint (r,g,b,alpha)
+const VISOR_SMOKE = [0.006, 0.007, 0.009, 0.9]; // RADIUM VISOR: near-black, high-opacity smoke
+// darken the front visor when the RADIUM VISOR mod is active, restore it otherwise
+function applyVisorTint() {
+  if (!visorMat) return;
+  const on = state.pick.mods.has("visor");
+  visorMat.pbrMetallicRoughness.setBaseColorFactor(on ? VISOR_SMOKE : VISOR_STOCK);
+}
+// The COMMS module is internal hardware — it lives inside the shell, so there is nothing to render.
+// (It stays a selectable/priced option; it just has no visible geometry.)
+let goproMats = [];                            // GoPro chin-cam materials, revealed by the ACTION-CAM mod
+// The GoPro is baked onto the chin as toggle-ready MASK materials (baked hidden). Reveal it by
+// restoring each material's colour at full alpha; hide it by dropping alpha below the mask cutoff.
+function applyGopro() {
+  if (!goproMats.length) return;
+  const on = state.pick.mods.has("cam");
+  goproMats.forEach(({ mat, rgb }) => mat.pbrMetallicRoughness.setBaseColorFactor([rgb[0], rgb[1], rgb[2], on ? 1 : 0]));
+}
+const GLB_VER = "6"; // bump when the .glb files change so browsers can't serve a stale cached copy
+function shellModelSrc() {
+  const shell = catById("shell");
+  const opt = shell.options.find((o) => o.id === state.pick.shell);
+  return `assets/models/helmet-${opt.model}.glb?v=${GLB_VER}`;
+}
+const ledOpt = () => catById("led").options.find((o) => o.id === state.pick.led);
+// LED annotations track the live selection (brake lumens + signal pattern)
+function ledAnnotations() {
+  const o = ledOpt();
+  return [`BRAKE // ${o.specs.LUMENS.toUpperCase()}`, "INDICATOR // AMBER", `PATTERN // ${o.specs.PATTERN}`];
+}
+// Owns the camera. Every section EXCEPT LED slowly rotates; LED locks to the dead-rear LED-centred
+// view and holds still. We DRIVE the hero rotation ourselves (a rAF loop) instead of model-viewer's
+// built-in `auto-rotate`: while auto-rotate is on, model-viewer overrides jumpCameraToGoal and EASES
+// the camera, so category/colour changes swung through random angles and a colour reload landed on
+// the back. Driving it ourselves means every frame hard-jumps to a goal WE own — the angle never
+// drifts, and because the loop re-asserts the orbit every frame a GLB reload can't move it.
+
+// Pin the render onto the current goal for a short window (used for the LED lock + its option-clicks;
+// also defeats model-viewer's own camera re-frame right after a fresh GLB loads).
+let snapUntil = 0, snapping = false;
+function snapCamera() {
+  const mv = $("#mv");
+  snapUntil = performance.now() + 350;
+  if (snapping) return;
+  snapping = true;
+  (function pin() {
+    if (mv.jumpCameraToGoal) mv.jumpCameraToGoal();
+    if (performance.now() < snapUntil) requestAnimationFrame(pin);
+    else snapping = false;
+  })();
+}
+
+// Hero rotation loop: advance the azimuth and hard-jump to it every frame. Paused in LED, while the
+// user is dragging, and DURING a GLB reload (`reloading`) — during a reload the loop's per-frame
+// setAttribute fights model-viewer's re-frame and swings the camera to the back, so we freeze the
+// loop and just PIN the fixed angle (snapCamera) through the reload, then resume rotating after.
+const HERO_PHI = "80deg", HERO_RADIUS = "auto";
+let heroTheta = 210, heroRAF = 0, heroPrev = 0, userHolding = false, reloading = false, fullscreen = false;
+const heroOrbit = () => `${heroTheta.toFixed(2)}deg ${HERO_PHI} ${HERO_RADIUS}`;
+function heroTick(t) {
+  heroRAF = 0;
+  if (state.active === "led" || userHolding || reloading || fullscreen || !use3D) { heroPrev = 0; return; }
+  const mv = $("#mv");
+  if (heroPrev) heroTheta = (heroTheta + 16 * (t - heroPrev) / 1000) % 360; // 16 deg/sec
+  heroPrev = t;
+  mv.setAttribute("camera-orbit", heroOrbit());
+  mv.setAttribute("camera-target", HERO_TARGET);
+  if (mv.jumpCameraToGoal) mv.jumpCameraToGoal();
+  heroRAF = requestAnimationFrame(heroTick);
+}
+function startHero() { if (!heroRAF && !reloading) { heroPrev = 0; heroRAF = requestAnimationFrame(heroTick); } }
+function stopHero() { if (heroRAF) cancelAnimationFrame(heroRAF); heroRAF = 0; heroPrev = 0; }
+
+function applyCamera() {
+  if (fullscreen) return;                  // full-screen viewer owns the camera; don't fight it
+  const mv = $("#mv");
+  if (state.active === "led") {
+    stopHero();
+    mv.setAttribute("camera-orbit", LED_ORBIT); mv.setAttribute("camera-target", LED_TARGET); mv.setAttribute("exposure", LED_EXPOSURE);
+    snapCamera();                          // snap onto the locked back view (re-snaps on option clicks too)
+  } else {
+    mv.setAttribute("exposure", HERO_EXPOSURE);
+    mv.setAttribute("camera-orbit", heroOrbit());
+    mv.setAttribute("camera-target", HERO_TARGET);
+    if (mv.jumpCameraToGoal) mv.jumpCameraToGoal();
+    if (reloading) snapCamera();           // reload: pin the fixed angle (loop stays paused), no swing
+    else startHero();                      // otherwise run the rotation loop
+  }
+}
+function renderPreview() {
+  const cat = catById(state.active);
+  const img = $("#helmet"), mv = $("#mv");
+  if (!use3D) {
+    // 3D unavailable (no WebGL / file://): fall back to the static category image
+    mv.style.display = "none";
+    img.style.display = "";
+    if (!img.src.endsWith(cat.image)) {
+      img.style.opacity = "0";
+      setTimeout(() => { img.src = cat.image; img.style.opacity = "1"; }, 180);
+    }
+  } else {
+    // live 3D helmet in the currently selected shell colour
+    img.style.display = "none";
+    mv.style.display = "";
+    const src = shellModelSrc();
+    if (!(mv.getAttribute("src") || "").endsWith(src)) { brakeMat = indR = indL = null; ledMode = null; reloading = true; stopHero(); mv.setAttribute("src", src); }
+    applyCamera();
+    applyVisorTint(); applyGopro();
+  }
+  const ann = cat.id === "led" ? ledAnnotations() : cat.ann;
+  document.querySelectorAll("[data-ann]").forEach((el) => (el.textContent = ann[+el.dataset.ann] || ""));
+}
+
+/* ---------------- totals ---------------- */
+function computeTotal() {
+  let total = BASE, items = 0;
+  CATS.forEach((c) => {
+    if (c.select === "multi") {
+      state.pick[c.id].forEach((id) => { total += c.options.find((o) => o.id === id).price; items++; });
+    } else {
+      total += c.options.find((o) => o.id === state.pick[c.id]).price; items++;
+    }
+  });
+  $("#total").textContent = rupee(total);
+  $("#cart-count").textContent = items;
+}
+
+/* ---------------- actions ---------------- */
+function setCategory(id) { state.active = id; paintRail(); renderPanel(); renderPreview(); }
+function pickOption(cat, id) {
+  if (cat.select === "multi") {
+    const set = state.pick[cat.id];
+    set.has(id) ? set.delete(id) : set.add(id);
+  } else {
+    if (state.pick[cat.id] === id) return;
+    state.pick[cat.id] = id;
+  }
+  renderPanel();
+  renderPreview();
+  computeTotal();
+}
+
+/* ---------------- init ---------------- */
+paintRail();
+renderPanel();
+renderPreview();
+computeTotal();
+
+// Only fall back to static images on a REAL failure (no WebGL, file://, broken/missing GLB).
+// No time-based fallback: a large GLB (~7MB) on a slow cold fetch must be allowed to finish
+// loading rather than being swapped out for an image just because it took a while.
+const mvEl = $("#mv");
+mvEl.addEventListener("error", () => { if (use3D) { use3D = false; renderPreview(); } });
+// once the GLB actually loads, make sure we're showing 3D (recovers from an error fallback)
+mvEl.addEventListener("load", () => { if (!use3D) { use3D = true; renderPreview(); } });
+// after every (re)load — e.g. a shell-colour swap — force the camera back to the current category's
+// framing and snap, so model-viewer's own post-load reset can't leave us parked at a random angle.
+mvEl.addEventListener("load", () => {
+  applyCamera();                 // (still `reloading` here → pins the fixed angle through the re-frame)
+  if (reloading) { reloading = false; setTimeout(() => { if (state.active !== "led" && !userHolding) startHero(); }, 350); }
+});
+// Let the user drag to orbit: pause the hero rotation while holding, and resume from wherever they
+// left off (so it doesn't snap back to the old angle).
+mvEl.addEventListener("pointerdown", () => { userHolding = true; });
+window.addEventListener("pointerup", () => {
+  if (!userHolding) return;
+  userHolding = false;
+  const o = mvEl.getCameraOrbit && mvEl.getCameraOrbit();
+  if (o && !fullscreen) heroTheta = ((o.theta * 180 / Math.PI) % 360 + 360) % 360;
+  if (state.active !== "led" && !reloading && !fullscreen) startHero();
+});
+
+/* ---------------- full-screen viewer ---------------- */
+// "View Full Screen" moves the LIVE #mv into a full-window overlay (so its LED animation, visor tint
+// and camera mod all carry over) and lets the user freely orbit + zoom. Back arrow / Esc restores it.
+const fsOverlay = $("#fs-overlay"), fsStage = $("#fs-stage");
+let mvHome = null;
+// Native model-viewer auto-rotate does NOT actually spin this setup (same reason we hand-drive the
+// configurator), so the fullscreen viewer runs its OWN loop: advance the azimuth every frame while
+// PRESERVING the user's current phi + radius (so zoom and vertical angle stick), and fully hand off
+// while they're dragging.
+let fsRAF = 0, fsTheta = 210, fsPrev = 0;
+function fsTick(ts) {
+  fsRAF = 0;
+  if (!fullscreen) return;
+  const mv = $("#mv");
+  fsRAF = requestAnimationFrame(fsTick);
+  if (userHolding) { fsPrev = 0; return; }             // let the user drag freely
+  const o = mv.getCameraOrbit && mv.getCameraOrbit();
+  if (!o) return;
+  if (!fsPrev) { fsTheta = o.theta * 180 / Math.PI; fsPrev = ts; return; } // (re)sync after a pause
+  fsTheta += 20 * (ts - fsPrev) / 1000;                // 20 deg/sec
+  fsPrev = ts;
+  const phi = (o.phi * 180 / Math.PI).toFixed(2), rad = o.radius.toFixed(2);
+  mv.setAttribute("camera-orbit", `${fsTheta.toFixed(2)}deg ${phi}deg ${rad}m`);
+  if (mv.jumpCameraToGoal) mv.jumpCameraToGoal();
+}
+function openFS() {
+  if (fullscreen || !use3D) return;
+  fullscreen = true;
+  stopHero();                                          // stop the configurator's rotation loop
+  mvHome = mvEl.parentElement;                         // remember the stage slot to restore into
+  // unlock zoom + a wide orbit range so the helmet can be inspected from any angle
+  mvEl.removeAttribute("disable-zoom");
+  mvEl.setAttribute("min-field-of-view", "12deg"); mvEl.setAttribute("max-field-of-view", "45deg");
+  mvEl.setAttribute("min-camera-orbit", "auto 5deg auto"); mvEl.setAttribute("max-camera-orbit", "auto 175deg auto");
+  fsStage.appendChild(mvEl);                           // move the live model into the overlay
+  mvEl.setAttribute("camera-target", HERO_TARGET);
+  mvEl.setAttribute("camera-orbit", "210deg 78deg auto");
+  if (mvEl.jumpCameraToGoal) mvEl.jumpCameraToGoal();
+  fsOverlay.classList.remove("hidden");
+  fsPrev = 0; if (!fsRAF) fsRAF = requestAnimationFrame(fsTick); // start the spin
+}
+function closeFS() {
+  if (!fullscreen) return;
+  fullscreen = false;                                  // stops fsTick on its next frame
+  if (fsRAF) { cancelAnimationFrame(fsRAF); fsRAF = 0; }
+  fsOverlay.classList.add("hidden");
+  if (mvHome) mvHome.appendChild(mvEl);                // move it back to the stage
+  // restore the configurator's locked framing
+  mvEl.setAttribute("disable-zoom", "");
+  mvEl.setAttribute("field-of-view", "30deg");
+  mvEl.setAttribute("min-field-of-view", "30deg"); mvEl.setAttribute("max-field-of-view", "30deg");
+  mvEl.setAttribute("min-camera-orbit", "auto 72deg auto"); mvEl.setAttribute("max-camera-orbit", "auto 92deg auto");
+  applyCamera();                                       // resume the active section's view + rotation
+}
+$("#fs-open").addEventListener("click", openFS);
+$("#stage-fs").addEventListener("click", openFS);   // mobile stage button
+$("#fs-back").addEventListener("click", closeFS);
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeFS(); closeCart(); } });
+
+/* ---------------- cart drawer + waitlist checkout ---------------- */
+const cartPanel = $("#cart-panel"), cartScrim = $("#cart-scrim");
+// every selected option across all categories, in order — this IS the build
+function buildLines() {
+  const lines = [];
+  CATS.forEach((c) => {
+    const ids = c.select === "multi" ? [...state.pick[c.id]] : [state.pick[c.id]];
+    ids.forEach((id) => { const o = c.options.find((x) => x.id === id); if (o) lines.push({ cat: c.label, name: o.name, price: o.price }); });
+  });
+  return lines;
+}
+function renderCart() {
+  const lines = buildLines();
+  const total = lines.reduce((s, l) => s + l.price, 0);
+  $("#cart-items").innerHTML = lines.map((l) =>
+    `<div class="flex items-start justify-between gap-3 border border-outline-variant bg-stage/50 p-3">
+       <div class="min-w-0">
+         <span class="font-spec-label text-[9px] uppercase text-on-surface-variant">${l.cat}</span>
+         <p class="font-display-hero text-[15px] text-surface-bright leading-tight mt-0.5">${l.name}</p>
+       </div>
+       <span class="font-technical-value text-[13px] whitespace-nowrap ${l.price === 0 ? "text-on-surface-variant" : "text-surface-bright"}">${l.price === 0 ? "INCLUDED" : rupee(l.price)}</span>
+     </div>`).join("");
+  $("#cart-total").textContent = rupee(total);
+}
+function showCartView() { $("#cart-view").classList.remove("hidden"); $("#cart-view").classList.add("flex"); $("#email-view").classList.add("hidden"); $("#email-view").classList.remove("flex"); $("#cart-heading").textContent = "CART"; }
+function showEmailView() {
+  const lines = buildLines(), total = lines.reduce((s, l) => s + l.price, 0);
+  $("#email-total").textContent = rupee(total);
+  $("#email-summary").textContent = lines.map((l) => l.name).join("  ·  ");
+  $("#email-err").classList.add("hidden");
+  $("#cart-view").classList.add("hidden"); $("#cart-view").classList.remove("flex");
+  $("#email-view").classList.remove("hidden"); $("#email-view").classList.add("flex");
+  $("#cart-heading").textContent = "CHECKOUT";
+  setTimeout(() => $("#email-input").focus(), 60);
+}
+function openCart() { renderCart(); showCartView(); cartPanel.classList.remove("translate-x-full"); cartScrim.classList.remove("opacity-0", "pointer-events-none"); }
+function closeCart() { cartPanel.classList.add("translate-x-full"); cartScrim.classList.add("opacity-0", "pointer-events-none"); }
+$("#cart-btn").addEventListener("click", openCart);
+$("#cart-close").addEventListener("click", closeCart);
+$("#cart-scrim").addEventListener("click", closeCart);
+$("#cart-checkout").addEventListener("click", showEmailView);
+$("#email-back").addEventListener("click", showCartView);
+// the transaction-bar Checkout opens the cart straight at the email step
+$("#bar-checkout").addEventListener("click", () => { renderCart(); cartPanel.classList.remove("translate-x-full"); cartScrim.classList.remove("opacity-0", "pointer-events-none"); showEmailView(); });
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+$("#email-confirm").addEventListener("click", async () => {
+  const input = $("#email-input"), email = input.value.trim();
+  if (!EMAIL_RE.test(email)) { $("#email-err").classList.remove("hidden"); input.focus(); return; }
+  $("#email-err").classList.add("hidden");
+  const lines = buildLines(), total = lines.reduce((s, l) => s + l.price, 0);
+  const btn = $("#email-confirm"); btn.disabled = true; btn.innerHTML = "Confirming…";
+  try {
+    await fetch("/api/waitlist", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, total, config: lines }) });
+  } catch (e) { /* best-effort — still take the user to the confirmation */ }
+  location.href = "waitlist.html?email=" + encodeURIComponent(email);
+});
+
+/* ---------------- live LED signature ---------------- */
+// The GLB ships real emissive LED geometry: a red brake material plus SEPARATE amber left/right
+// indicator materials (split in tools/split-indicator.mjs so each side has its own texture+sampler).
+// Every frame we drive them straight off the selected LED tier:
+//   • brightness  -> emissiveStrength (a real HDR bump, so HIGH-LUM/SEQUENTIAL out-glow STANDARD)
+//   • STATIC_TRI  -> packed-dot emissive map, brake + both indicators blink on/off together
+//   • SWEEP_ANIM  -> a dotted FILL emissive map: dots stay lit BEHIND a wavefront that grows from
+//                    the inner edge outward (CLAMP wrap holds the lit region), mirrored L vs R, then
+//                    blanks and repeats — an Audi-style progressive light-up (brake stays lit).
+const V2 = (u, v) => ({ u, v });
+const REPEAT = 10497, CLAMP = 33071;
+// Sequential fill is a FLIPBOOK: the dots sit at FIXED positions on each strip; we pre-render N+1
+// stage textures (stage k = innermost k columns of dots lit) and swap to the next stage as the fill
+// grows — so once a pixel lights it STAYS lit until the whole strip is full, then it blanks and
+// repeats. (A single sliding texture can't do this — its dots would drift across the strip and
+// shimmer, which is exactly what looked wrong before.)
+const GX = 14, GY = 16, FILL_COLS = GX;        // dense dot matrix; fill reveals one dot-column per step
+// Map each strip's baked UV onto the [0,1] texture: R inner edge (U=4.44) -> u=0, outer -> u=1;
+// L is mirrored so ITS inner edge lands at u=1; V [-8.24,5.31] -> [0,1].
+const FILL_SCALE = V2(1 / 11.47, 1 / 13.55);
+const FILL_OFF_R = V2(-4.44 / 11.47, 8.24 / 13.55);
+const FILL_OFF_L = V2(1 + 4.44 / 11.47, 8.24 / 13.55);
+let ledFillR = [], ledFillL = [];              // per-side flipbook stage textures (samplers pre-set)
+let ledDotR = null, ledDotL = null;            // original packed-dot maps, restored for static modes
+let ledStage = -1;                             // flipbook stage currently shown
+
+// One flipbook frame: a dense GX×GY dot matrix (like the brake's packed LEDs) with the innermost
+// `lit` dot-columns on, at FIXED positions. `mirror` lights from the right edge (for the LEFT strip,
+// whose inner edge maps to the right of the texture). Canvas aspect ~matches the strip's UV box so
+// the dots render round, not stretched.
+function makeStageTexture(lit, mirror) {
+  const c = document.createElement("canvas"); c.width = 252; c.height = 298;
+  const g = c.getContext("2d"); g.fillStyle = "#000"; g.fillRect(0, 0, c.width, c.height);
+  const r = c.width / GX * 0.34;                 // dot radius ~1/3 of the column pitch
+  for (let gx = 0; gx < GX; gx++) {
+    if (mirror ? gx < GX - lit : gx >= lit) continue; // innermost `lit` dot-columns on, rest dark
+    for (let gy = 0; gy < GY; gy++) {
+      g.beginPath(); g.arc((gx + 0.5) / GX * c.width, (gy + 0.5) / GY * c.height, r, 0, 7);
+      g.fillStyle = "#fff"; g.fill();
+    }
+  }
+  return c.toDataURL();
+}
+const configFill = (t, off) => { const s = t.sampler; s.setWrapS(CLAMP); s.setWrapT(CLAMP); s.setScale(FILL_SCALE); s.setOffset(off); };
+async function bindLEDMaterials() {
+  brakeMat = indR = indL = null; ledMode = null; ledStage = -1;
+  const mats = mvEl.model && mvEl.model.materials;
+  if (!mats) return;
+  visorMat = null; goproMats = [];
+  mats.forEach((m) => {
+    if (m.name === "brake") brakeMat = m;
+    else if (m.name === "ind_R") indR = m;
+    else if (m.name === "ind_L") indL = m;      // separate materials so each side animates independently
+    else if (m.name === "visor_glass") visorMat = m;
+    else if (m.name && m.name.startsWith("gp_")) {
+      // remember the GoPro material's colour (baked alpha is 0 = hidden); applyGopro restores it
+      const f = m.pbrMetallicRoughness.baseColorFactor;
+      goproMats.push({ mat: m, rgb: [f[0], f[1], f[2]] });
+    }
+  });
+  // resilience: on an unsplit/older GLB the names are absent — classify the two emissive materials
+  // by hue (amber vs red) so the lights still blink (the mirrored fill just degrades gracefully).
+  if (!(brakeMat && indR && indL)) {
+    mats.forEach((m) => {
+      const e = m.emissiveFactor;
+      if (!e || e[0] + e[1] + e[2] <= 0) return;
+      if (e[1] > 0.1) { indR = indR || m; } else { brakeMat = brakeMat || m; }
+    });
+    indL = indL || indR;                        // no independent left material available
+  }
+  ledDotR = indR && indR.emissiveTexture.texture;
+  ledDotL = indL && indL.emissiveTexture.texture;
+  if (!ledFillR.length && mvEl.createTexture) { // build both flipbooks once (parallel), pre-set samplers
+    const stages = Array.from({ length: FILL_COLS + 1 }, (_, k) => k);
+    ledFillR = await Promise.all(stages.map((k) => mvEl.createTexture(makeStageTexture(k, false))));
+    ledFillL = await Promise.all(stages.map((k) => mvEl.createTexture(makeStageTexture(k, true))));
+    // NB: the sampler transform is applied per-stage after setTexture (see ledFrame) — setting it on
+    // an unattached texture here does not take effect.
+  }
+  applyVisorTint(); applyGopro(); // re-apply mod-driven material state to the freshly-loaded model
+}
+mvEl.addEventListener("load", bindLEDMaterials);
+
+// switch the indicator emissive setup to match the current pattern (only on change)
+function applyLEDMode(mode) {
+  if (mode === ledMode || !indR || !indL) return;
+  if (mode === "sweep" && !ledFillR.length) return; // flipbook not ready yet — stay on dots
+  ledMode = mode; ledStage = -1;               // force the frame loop to (re)apply the right stage
+  if (mode === "static") {                     // restore the packed-dot map for the blink modes
+    if (ledDotR) indR.emissiveTexture.setTexture(ledDotR);
+    if (ledDotL) indL.emissiveTexture.setTexture(ledDotL);
+    [indR, indL].forEach((m) => { const s = m.emissiveTexture.texture.sampler; s.setWrapS(REPEAT); s.setScale(V2(1, 1)); s.setOffset(V2(0, 0)); });
+  }
+}
+function setEm(m, color, level, strength) {
+  if (!m) return;
+  m.setEmissiveFactor([color[0] * level, color[1] * level, color[2] * level]);
+  if (m.setEmissiveStrength) m.setEmissiveStrength(level > 0 ? strength : 0.0001);
+}
+function ledFrame(ts) {
+  try {
+    if (brakeMat && indR && indL) {
+      const o = ledOpt();
+      const hi = parseInt(o.specs.LUMENS) >= 1600;        // 1600lm tiers run hotter + whiter
+      const strength = hi ? 5.0 : 1.5;                    // real HDR brightness step (emissiveStrength)
+      const w = hi ? 0.22 : 0;                            // whiten the glow (colour temp) as lumens climb
+      const bC = [1, 0.04 + w, 0.04 + w], iC = [1, 0.30 + w, 0.02 + w];
+      const seq = o.specs.PATTERN === "SWEEP_ANIM";
+      applyLEDMode(seq ? "sweep" : "static");
+      if (seq) {
+        // Snappy cycle: light columns one-by-one, each STAYS lit (0..0.60); hold full (..0.78); then
+        // EVERYTHING — brake included — blanks (..1.0), giving a shared blink-off before it restarts.
+        const ph = (ts % 1000) / 1000;
+        let stage, lvl;
+        if (ph < 0.60) { stage = Math.min(FILL_COLS, Math.floor(ph / 0.60 * (FILL_COLS + 1))); lvl = 1; }
+        else if (ph < 0.78) { stage = FILL_COLS; lvl = 1; } // hold fully lit
+        else { stage = FILL_COLS; lvl = 0; }                // all off (brake too), then the cycle restarts
+        if (stage !== ledStage) {                // advance the flipbook only when the stage changes
+          ledStage = stage;
+          indR.emissiveTexture.setTexture(ledFillR[stage]);
+          indL.emissiveTexture.setTexture(ledFillL[stage]);
+          // the UV transform must be (re)applied to the ATTACHED texture's sampler to take effect
+          configFill(indR.emissiveTexture.texture, FILL_OFF_R);
+          configFill(indL.emissiveTexture.texture, FILL_OFF_L);
+        }
+        setEm(brakeMat, bC, lvl, strength);      // brake blinks off with the indicators each cycle
+        setEm(indR, iC, lvl, strength);
+        setEm(indL, iC, lvl, strength);
+      } else {
+        const on = (ts % 900) / 900 < 0.5 ? 1 : 0;        // static tri: everything blinks together
+        setEm(brakeMat, bC, on, strength);
+        setEm(indR, iC, on, strength);
+        setEm(indL, iC, on, strength);
+      }
+    }
+  } catch (e) { /* material detached mid-reload; next load rebinds */ }
+  requestAnimationFrame(ledFrame);
+}
+requestAnimationFrame(ledFrame);
+</script>
+</body>
+</html>
