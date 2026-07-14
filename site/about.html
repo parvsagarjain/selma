@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SELMA — About the Founder | Daksh Rai</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
   <meta name="description" content="Daksh Rai — Founder and Inventor of SELMA, The Blaze Cap. A 17-year-old inventor making two-wheeler riding safer through practical, innovative engineering." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,8 +25,21 @@
       <a href="index.html#models">Models</a>
       <a href="about.html">Founder</a>
     </nav>
-    <a href="configure.html" class="btn btn-dark nav-cta">Configure</a>
+    <div class="nav-actions">
+      <a href="configure.html" class="btn btn-dark nav-cta">Configure</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </header>
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <a href="index.html#problem">Why</a>
+    <a href="index.html#feature">The Light</a>
+    <a href="index.html#tech">Tech</a>
+    <a href="index.html#models">Models</a>
+    <a href="about.html">Founder</a>
+    <a href="configure.html" class="btn btn-red full mobile-menu-cta">Configure yours →</a>
+  </div>
 
   <main id="top">
     <!-- ABOUT HERO -->
@@ -82,6 +96,29 @@
     <section class="band" id="milestones">
       <p class="eyebrow dark reveal">Recognition</p>
       <h2 class="display section-title wide reveal">PROVEN, ON&nbsp;RECORD.</h2>
+
+      <div class="patent reveal">
+        <figure class="patent-doc">
+          <img src="assets/patent.jpg" alt="Certificate of Registration of Design No. 489566-001, granted to Daksh Rai by the Patent Office, Government of India, for the SELMA helmet" />
+          <figcaption class="photo-tag">Patent Office · Govt. of India</figcaption>
+        </figure>
+        <div class="patent-info">
+          <p class="eyebrow">Granted &amp; certified</p>
+          <h3 class="display patent-title">A REGISTERED<br />DESIGN.</h3>
+          <p class="patent-lead">
+            SELMA's smart-helmet design is officially registered with the Patent
+            Office, Government of India — protecting the invention Daksh built from
+            the ground up.
+          </p>
+          <dl class="patent-specs">
+            <div><dt>Design No.</dt><dd>489566-001</dd></div>
+            <div><dt>Class</dt><dd>02-03 · Helmet</dd></div>
+            <div><dt>Registered</dt><dd>03 Feb 2026</dd></div>
+            <div><dt>Holder</dt><dd>Daksh Rai</dd></div>
+          </dl>
+        </div>
+      </div>
+
       <div class="about-stats">
         <div class="about-stat reveal">
           <span class="stat-num" data-count="17">0</span>

@@ -92,15 +92,10 @@ img { display: block; max-width: 100%; }
 }
 .brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: var(--ink); }
 .brand-mark {
-  width: 18px; height: 18px;
-  background: var(--ink);
-  clip-path: polygon(50% 0, 100% 38%, 82% 100%, 18% 100%, 0 38%);
-  position: relative;
+  width: 28px; height: 30px;
+  background: url("assets/logo-mark.png") center / contain no-repeat;
 }
-.brand-mark::after {
-  content: ""; position: absolute; inset: 4px 4px auto 4px; height: 3px;
-  background: var(--yellow); box-shadow: 0 4px 0 var(--red);
-}
+.brand-mark::after { content: none; }
 .brand-word {
   font-family: var(--font-mono);
   font-weight: 700; letter-spacing: 0.26em; font-size: 0.98rem;
@@ -118,6 +113,42 @@ img { display: block; max-width: 100%; }
 }
 .nav-links a:hover::after { width: 100%; }
 .nav-cta { padding: 0.6rem 1.2rem; }
+
+/* ---------- mobile nav (hamburger + dropdown) ---------- */
+.nav-actions { display: flex; align-items: center; gap: 0.7rem; }
+.nav-toggle {
+  display: none;            /* shown ≤900px, where the inline links hide */
+  flex-direction: column; justify-content: center; gap: 5px;
+  width: 42px; height: 42px; padding: 10px;
+  background: transparent; border: none; cursor: pointer;
+}
+.nav-toggle span {
+  display: block; width: 100%; height: 2px; background: var(--ink);
+  transition: transform 0.3s var(--ease), opacity 0.2s;
+}
+.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-menu {
+  position: fixed; inset: 0 0 auto 0; z-index: 90;
+  background: var(--white);
+  padding: 5.4rem clamp(1.2rem, 5vw, 2.2rem) 1.6rem;
+  display: flex; flex-direction: column;
+  transform: translateY(-100%);
+  transition: transform 0.4s var(--ease);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+  border-bottom: 2px solid var(--ink);
+}
+.mobile-menu.open { transform: translateY(0); }
+.mobile-menu a:not(.mobile-menu-cta) {
+  font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em;
+  text-decoration: none; color: var(--ink); font-size: 1.05rem; font-weight: 700;
+  padding: 1.05rem 0.2rem; border-bottom: 1px solid var(--line);
+  transition: color 0.2s, padding-left 0.2s var(--ease);
+}
+.mobile-menu a:not(.mobile-menu-cta):hover { color: var(--red); padding-left: 0.5rem; }
+.mobile-menu-cta { margin-top: 1.3rem; }
 
 /* ---------- eyebrow / shared ---------- */
 .eyebrow {
@@ -197,8 +228,12 @@ img { display: block; max-width: 100%; }
   z-index: 2;
   right: clamp(4rem, 11vw, 11rem);
   top: 50%;
-  transform: translateY(-100%);
-  width: min(49vw, 650px);
+  /* Anchor the helmet's bottom above the black stripe. The extra -6vh lifts it clear of the
+     stripe on shorter (non-maximized) windows, where the hero centre drifts below the stripe top. */
+  transform: translateY(calc(-100% - 6vh));
+  /* Size by the SMALLER of viewport width and height so a short/narrow window can't blow the
+     helmet up into the black stripe below it. Aspect ≈ 1.42:1. */
+  width: min(46vw, 600px, 58vh);
   pointer-events: none;
 }
 .hero-foot {
@@ -365,6 +400,7 @@ img { display: block; max-width: 100%; }
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
   .nav-links { display: none; }
+  .nav-toggle { display: flex; }
   .grid-2 { grid-template-columns: 1fr; }
   .feature { grid-template-columns: 1fr; }
   .feature-media { order: -1; max-width: 480px; margin: 0 auto; }
@@ -373,24 +409,31 @@ img { display: block; max-width: 100%; }
   .spec:nth-child(3n) { border-right: 1px solid var(--line); }
   .spec:nth-child(2n) { border-right: none; }
 }
-@media (max-width: 720px) {
+/* Below ~1080px the side-by-side hero gets cramped (helmet collides with the headline and
+   the black stripe), so switch to a clean vertical stack: title → helmet (centred, on white)
+   → sub + CTAs → black stripe last. Side-by-side is kept only for ≥1081px, where it has room.
+   NB: the parallax in script.js is gated to (min-width:1081px) to match this breakpoint. */
+@media (max-width: 1080px) {
   .hero {
     min-height: auto;
     justify-content: flex-start;
     padding: 6.5rem 0 0;
     gap: 0;
   }
-  /* mobile stack: title → helmet (centered, on white) → sub + CTAs → black strip last */
   .hero-top { order: 1; }
   .hero-helmet {
     order: 2; position: relative; right: auto; top: auto; transform: none;
-    width: 74%; max-width: 340px; margin: 1.4rem auto 0.2rem;
+    width: min(72%, 460px); margin: 1.6rem auto 0.2rem;
   }
   .hero-bottom { order: 3; margin-top: 0.8rem; }
   .hero-stripe { order: 4; height: 110px; margin-top: 2.2rem; }
-  .hero-title { font-size: clamp(2.8rem, 13vw, 4.2rem); }
+  .hero-title { font-size: clamp(2.8rem, 9vw, 6rem); }
   .hero-foot { display: none; }
   .stripe-tag { display: none; }
+}
+@media (max-width: 720px) {
+  .hero-helmet { width: 74%; max-width: 340px; }
+  .hero-title { font-size: clamp(2.8rem, 13vw, 4.2rem); }
 }
 @media (max-width: 480px) {
   .spec-grid { grid-template-columns: 1fr; }
@@ -432,7 +475,7 @@ img { display: block; max-width: 100%; }
   content: ""; position: absolute; top: 0; left: 0; right: 0; height: 6px;
   background: linear-gradient(90deg, var(--red) 50%, var(--yellow) 50%); z-index: 2;
 }
-.about-photo .photo-tag {
+.about-photo .photo-tag, .patent-doc .photo-tag {
   position: absolute; left: 0; bottom: 0; z-index: 2;
   background: var(--ink); color: #cfcfca;
   font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.16em;
@@ -470,6 +513,38 @@ img { display: block; max-width: 100%; }
 .about-stat .stat-num { font-size: clamp(2.6rem, 6vw, 4.4rem); }
 .about-stat .stat-label { margin-top: 0.4rem; }
 
+/* patent certificate showcase — framed doc + registration details */
+.patent {
+  display: grid; grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(2rem, 5vw, 4.5rem); align-items: center;
+  margin: 1rem 0 3.2rem;
+}
+.patent-doc {
+  position: relative; border: 2px solid var(--ink);
+  box-shadow: 14px 14px 0 var(--ink); background: var(--white);
+  width: 100%; max-width: 430px; margin: 0 auto;
+}
+.patent-doc img { width: 100%; display: block; }
+.patent-doc::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+  background: linear-gradient(90deg, var(--red) 50%, var(--yellow) 50%); z-index: 2;
+}
+.patent-title { font-size: clamp(2rem, 4vw, 3.2rem); margin: 0.4rem 0 0; }
+.patent-lead {
+  font-family: var(--font-soft); font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  line-height: 1.4; color: #2b2b2d; font-weight: 500; max-width: 44ch; margin-top: 1.2rem;
+}
+.patent-specs { margin-top: 1.9rem; border-top: 1px solid var(--line); }
+.patent-specs > div {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  padding: 0.85rem 0.1rem; border-bottom: 1px solid var(--line);
+}
+.patent-specs dt {
+  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #6a6a6d;
+}
+.patent-specs dd { font-weight: 700; font-size: 0.98rem; }
+
 @media (max-width: 900px) {
   .about-hero { grid-template-columns: 1fr; padding-top: 7rem; }
   .about-hero-media { order: -1; }
@@ -477,4 +552,7 @@ img { display: block; max-width: 100%; }
   .story .story-grid { grid-template-columns: 1fr; }
   .about-stats { grid-template-columns: 1fr; }
   .about-stat, .about-stat:last-child { border-right: none; }
+  .patent { grid-template-columns: 1fr; gap: 2.2rem; }
+  .patent-doc { max-width: 340px; }
+  .patent-info { text-align: left; }
 }

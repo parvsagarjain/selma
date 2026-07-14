@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SELMA — The Blaze Cap | Be Seen. Ride Blaze.</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
   <meta name="description" content="A smart helmet with a high-mounted brake light and turn indicators, wired to your bike — blazing into the eyeline of the driver behind you." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,8 +25,21 @@
       <a href="#models">Models</a>
       <a href="about.html">Founder</a>
     </nav>
-    <a href="configure.html" class="btn btn-dark nav-cta">Configure</a>
+    <div class="nav-actions">
+      <a href="configure.html" class="btn btn-dark nav-cta">Configure</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </header>
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <a href="#problem">Why</a>
+    <a href="#feature">The Light</a>
+    <a href="#tech">Tech</a>
+    <a href="#models">Models</a>
+    <a href="about.html">Founder</a>
+    <a href="configure.html" class="btn btn-red full mobile-menu-cta">Configure yours →</a>
+  </div>
 
   <main id="top">
     <!-- HERO -->
@@ -128,7 +142,7 @@
       <h2 class="display section-title wide reveal">ENGINEERED TO BE SEEN.</h2>
       <div class="spec-grid">
         <div class="spec reveal"><span class="spec-k">Lights</span><span class="spec-v">12V LED brake + indicator arrays</span></div>
-        <div class="spec reveal"><span class="spec-k">Brain</span><span class="spec-v">Dual 32-bit ESP module</span></div>
+        <div class="spec reveal"><span class="spec-k">Brain</span><span class="spec-v">Wireless transmitter</span></div>
         <div class="spec reveal"><span class="spec-k">Charging</span><span class="spec-v">USB-C · full in 20 min</span></div>
         <div class="spec reveal"><span class="spec-k">Battery</span><span class="spec-v">12 hr+ ride time</span></div>
         <div class="spec reveal"><span class="spec-k">Shell</span><span class="spec-v">3D-printed aero body</span></div>
@@ -157,7 +171,6 @@
           <ul class="mini-spec">
             <li><span>Connection</span><span>CAT6 · RJ45</span></li>
             <li><span>Latency</span><span>Instant, hard-wired</span></li>
-            <li><span>Battery</span><span>12 hr+</span></li>
           </ul>
           <a href="configure.html?core=wired" class="btn btn-dark full">Choose Wired</a>
         </article>
@@ -170,13 +183,12 @@
           <h3 class="card-title">Wireless Blaze Cap</h3>
           <p class="card-line">Cut the cord. Keep the glow.</p>
           <p class="card-blurb">
-            Dual 32-bit ESP links to your bike over Wi-Fi via your phone hotspot,
+            A wireless transmitter links to your bike via your phone hotspot,
             transmitting brake &amp; turn signals in just 2 milliseconds.
           </p>
           <ul class="mini-spec">
-            <li><span>Connection</span><span>Wi-Fi · dual ESP</span></li>
+            <li><span>Connection</span><span>Wireless transmitter</span></li>
             <li><span>Latency</span><span>2 ms</span></li>
-            <li><span>Battery</span><span>12 hr+</span></li>
           </ul>
           <a href="configure.html?core=wireless" class="btn btn-red full">Choose Wireless</a>
         </article>
