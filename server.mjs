@@ -4,6 +4,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import crypto from "node:crypto";
 import Database from "better-sqlite3";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -37,6 +38,14 @@ const upsert = db.prepare(`
 //   SHEET_WEBHOOK_TOKEN — a shared secret the script checks (optional but recommended)
 const SHEET_WEBHOOK_URL = process.env.SHEET_WEBHOOK_URL || "";
 const SHEET_WEBHOOK_TOKEN = process.env.SHEET_WEBHOOK_TOKEN || "";
+// Admin token that protects GET /api/waitlist (the sign-up list). If unset, that endpoint is
+// DISABLED entirely — so a public deploy never leaks emails. Set ADMIN_TOKEN to enable the peek.
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "";
+// constant-time compare so a token can't be guessed by timing the response
+function safeEqual(a, b) {
+  const ab = Buffer.from(String(a)), bb = Buffer.from(String(b));
+  return ab.length === bb.length && crypto.timingSafeEqual(ab, bb);
+}
 async function mirrorToSheet({ email, total, build, created_at }) {
   if (!SHEET_WEBHOOK_URL) return; // not configured — sheet mirroring off, SQLite still records it
   try {
@@ -82,8 +91,15 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // GET /api/waitlist — quick admin peek at stored sign-ups
+  // GET /api/waitlist — admin peek at stored sign-ups. PROTECTED: requires the ADMIN_TOKEN,
+  // passed as ?token=… or an "x-admin-token" header. Without a configured/matching token we
+  // return 404 (not 401) so the endpoint's existence isn't even revealed on a public deploy.
   if (req.method === "GET" && url === "/api/waitlist") {
+    const token = new URL(req.url, "http://localhost").searchParams.get("token") || req.headers["x-admin-token"] || "";
+    if (!ADMIN_TOKEN || !safeEqual(token, ADMIN_TOKEN)) {
+      res.writeHead(404, { "content-type": "text/plain" });
+      return res.end("404 — not found");
+    }
     const rows = db.prepare("SELECT id, email, total, created_at, updated_at FROM waitlist ORDER BY id DESC").all();
     return json(res, 200, rows);
   }

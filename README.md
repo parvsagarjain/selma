@@ -32,12 +32,13 @@ Override the port with `PORT=3000 npm start`.
 
 - `POST /api/waitlist` — `{ email, total, config }` → stored in `data/waitlist.db`
   (upsert by email) and best-effort mirrored to a Google Sheet.
-- `GET  /api/waitlist` — admin peek at sign-ups (⚠️ unprotected — lock down before
-  a public deploy).
+- `GET  /api/waitlist?token=…` — admin peek at sign-ups. **Protected** by `ADMIN_TOKEN`
+  (pass it as `?token=…` or an `x-admin-token` header). If `ADMIN_TOKEN` is unset the
+  endpoint is disabled entirely, so a public deploy can't leak emails.
 
-Google-Sheet mirroring is configured via `.env`
-(`SHEET_WEBHOOK_URL`, `SHEET_WEBHOOK_TOKEN`). Setup steps + the Apps Script code
-are in **WAITLIST-SHEET-SETUP.md**.
+Configured via `.env` (`SHEET_WEBHOOK_URL`, `SHEET_WEBHOOK_TOKEN` for the Google-Sheet
+mirror; `ADMIN_TOKEN` to protect the peek). On a host like Render, set these as
+environment variables. Setup steps + the Apps Script code are in **WAITLIST-SHEET-SETUP.md**.
 
 ## Structure
 
